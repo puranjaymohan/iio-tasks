@@ -1,0 +1,55 @@
+pi@raspberrypi:~ $ lsmod | grep dummy
+iio_dummy              16384  2
+iio_dummy_evgen        16384  1 iio_dummy
+pi@raspberrypi:~ $ ls -l /config/iio/devices/dummy/
+total 0
+drwxr-xr-x 2 root root 0 Mar 19 11:17 my_iio_device
+pi@raspberrypi:~ $ ls -l /sys/bus/iio/devices/iio:device0/
+total 0
+drwxr-xr-x 2 root root    0 Mar 19 11:17 buffer
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 current_timestamp_clock
+-r--r--r-- 1 root root 4096 Mar 19 11:17 dev
+drwxr-xr-x 2 root root    0 Mar 19 11:17 events
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_accel_x_calibbias
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_accel_x_calibscale
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_accel_x_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_activity_running_input
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_activity_walking_input
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_magn_scale
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_magn_x_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_magn_y_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_magn_z_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_sampling_frequency
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_steps_calibheight
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_steps_en
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_steps_input
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage0_offset
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage0_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage0_scale
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage1-voltage2_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage3-voltage4_raw
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 in_voltage-voltage_scale
+-r--r--r-- 1 root root 4096 Mar 19 11:17 name
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 out_voltage0_raw
+drwxr-xr-x 2 root root    0 Mar 19 11:17 power
+drwxr-xr-x 2 root root    0 Mar 19 11:17 scan_elements
+lrwxrwxrwx 1 root root    0 Mar 19 11:17 subsystem -> ../../bus/iio
+drwxr-xr-x 2 root root    0 Mar 19 11:17 trigger
+-rw-r--r-- 1 root root 4096 Mar 19 11:17 uevent
+pi@raspberrypi:~ $ ls -l /sys/bus/iio/devices/iio_evgen/
+total 0
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev0
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev1
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev2
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev3
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev4
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev5
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev6
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev7
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev8
+--w------- 1 root root 4096 Mar 19 11:39 poke_ev9
+drwxr-xr-x 2 root root    0 Mar 19 11:39 power
+lrwxrwxrwx 1 root root    0 Mar 19 11:39 subsystem -> ../../bus/iio
+-rw-r--r-- 1 root root 4096 Mar 19 11:16 uevent
+pi@raspberrypi:~ $ 
+

@@ -1,0 +1,151 @@
+From 0765d90a2cf7af79d327d3b17de5c9da2a3946d8 Mon Sep 17 00:00:00 2001
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Fri, 19 Mar 2021 11:43:28 +0530
+Subject: [PATCH] IIO: dummy: Add channels for a 3-axis compass
+
+Add channels for a 3-axis compass for the task 3 of the iio tasks.
+
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ drivers/iio/dummy/iio_simple_dummy.c | 79 ++++++++++++++++++++++++++++
+ drivers/iio/dummy/iio_simple_dummy.h |  6 +++
+ 2 files changed, 85 insertions(+)
+
+diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
+index 6cb02299a..323593d8d 100644
+--- a/drivers/iio/dummy/iio_simple_dummy.c
++++ b/drivers/iio/dummy/iio_simple_dummy.c
+@@ -265,6 +265,60 @@ static const struct iio_chan_spec iio_dummy_channels[] = {
+ 		.num_event_specs = 1,
+ #endif /* CONFIG_IIO_SIMPLE_DUMMY_EVENTS */
+ 	},
++	/*
++	 * Compass for task 4
++	 */
++	{
++		.type = IIO_MAGN,
++		.modified = 1,
++		/* Channel 2 is use for modifiers */
++		.channel2 = IIO_MOD_X,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
++		.info_mask_shared_by_dir = BIT(IIO_CHAN_INFO_SAMP_FREQ),
++		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = DUMMY_INDEX_COMP_X,
++		.scan_type = { /* Description of storage in buffer */
++			.sign = 'u', /* signed */
++			.realbits = 16, /* 16 bits */
++			.storagebits = 16, /* 16 bits used for storage */
++			.shift = 0, /* zero shift */
++		},
++	},
++	{
++		.type = IIO_MAGN,
++		.modified = 1,
++		/* Channel 2 is use for modifiers */
++		.channel2 = IIO_MOD_Y,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
++		.info_mask_shared_by_dir = BIT(IIO_CHAN_INFO_SAMP_FREQ),
++		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = DUMMY_INDEX_COMP_Y,
++		.scan_type = { /* Description of storage in buffer */
++			.sign = 'u', /* signed */
++			.realbits = 16, /* 16 bits */
++			.storagebits = 16, /* 16 bits used for storage */
++			.shift = 0, /* zero shift */
++		},
++	},
++	{
++		.type = IIO_MAGN,
++		.modified = 1,
++		/* Channel 2 is use for modifiers */
++		.channel2 = IIO_MOD_Z,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
++		.info_mask_shared_by_dir = BIT(IIO_CHAN_INFO_SAMP_FREQ),
++		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = DUMMY_INDEX_COMP_Z,
++		.scan_type = { /* Description of storage in buffer */
++			.sign = 'u', /* signed */
++			.realbits = 16, /* 16 bits */
++			.storagebits = 16, /* 16 bits used for storage */
++			.shift = 0, /* zero shift */
++		},
++	},
++
++
++
+ };
+ 
+ /**
+@@ -309,6 +363,23 @@ static int iio_dummy_read_raw(struct iio_dev *indio_dev,
+ 			*val = st->accel_val;
+ 			ret = IIO_VAL_INT;
+ 			break;
++		case IIO_MAGN:
++			if(chan->modified) {
++				switch(chan->channel2) {
++					case IIO_MOD_X:
++						*val = st->comp_x;
++						ret = IIO_VAL_INT;
++						break;
++					case IIO_MOD_Y:
++						*val = st->comp_y;
++						ret = IIO_VAL_INT;
++						break;
++					case IIO_MOD_Z:
++						*val = st->comp_z;
++						ret = IIO_VAL_INT;
++						break;
++				}
++			}
+ 		default:
+ 			break;
+ 		}
+@@ -359,6 +430,11 @@ static int iio_dummy_read_raw(struct iio_dev *indio_dev,
+ 				ret = IIO_VAL_INT_PLUS_NANO;
+ 			}
+ 			break;
++		case IIO_MAGN:
++			*val = 0;
++			*val2 = 1234;
++			ret = IIO_VAL_INT_PLUS_MICRO;
++			break;
+ 		default:
+ 			break;
+ 		}
+@@ -547,6 +623,9 @@ static int iio_dummy_init_device(struct iio_dev *indio_dev)
+ 	st->steps = 47;
+ 	st->activity_running = 98;
+ 	st->activity_walking = 4;
++	st->comp_x = 123;
++	st->comp_y = 456;
++	st->comp_z = 789;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/iio/dummy/iio_simple_dummy.h b/drivers/iio/dummy/iio_simple_dummy.h
+index a91622ac5..bcdcdd56f 100644
+--- a/drivers/iio/dummy/iio_simple_dummy.h
++++ b/drivers/iio/dummy/iio_simple_dummy.h
+@@ -39,6 +39,9 @@ struct iio_dummy_state {
+ 	int steps_enabled;
+ 	int steps;
+ 	int height;
++	int comp_x;
++	int comp_y;
++	int comp_z;
+ #ifdef CONFIG_IIO_SIMPLE_DUMMY_EVENTS
+ 	int event_irq;
+ 	int event_val;
+@@ -107,6 +110,9 @@ enum iio_simple_dummy_scan_elements {
+ 	DUMMY_INDEX_DIFFVOLTAGE_1M2,
+ 	DUMMY_INDEX_DIFFVOLTAGE_3M4,
+ 	DUMMY_INDEX_ACCELX,
++	DUMMY_INDEX_COMP_X = 5,
++	DUMMY_INDEX_COMP_Y,
++	DUMMY_INDEX_COMP_Z,
+ };
+ 
+ #ifdef CONFIG_IIO_SIMPLE_DUMMY_BUFFER
+-- 
+2.30.1
+

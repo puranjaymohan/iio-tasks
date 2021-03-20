@@ -1,0 +1,12 @@
+root@raspberrypi /h/p/l/t/iio# ./iio_event_monitor /dev/iio:device0
+“./iio_event_monitor /dev/iio:de…” has stopped
+root@raspberrypi /h/p/l/t/iio# bg
+Send job 1 “./iio_event_monitor /dev/iio:device0” to background
+root@raspberrypi /h/p/l/t/iio# echo "1" > /sys/bus/iio/devices/iio_evgen/poke_ev0
+Event: time: 1616143318043501392, type: activity(running), channel: 0, evtype: thresh, direction: rising
+root@raspberrypi /h/p/l/t/iio# echo "0" > /sys/bus/iio/devices/iio_evgen/poke_ev0
+Event: time: 1616143322781485111, type: voltage, channel: 0, evtype: thresh, direction: rising
+root@raspberrypi /h/p/l/t/iio# echo "2" > /sys/bus/iio/devices/iio_evgen/poke_ev0
+root@raspberrypi /h/p/l/t/iio# echo "3" > /sys/bus/iio/devices/iio_evgen/poke_ev0
+Event: time: 1616143329701951145, type: steps, channel: 0, evtype: change
+
